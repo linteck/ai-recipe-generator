@@ -47,6 +47,33 @@ function App() {
     }
   };
 
+  const onSubmitAsk = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+
+    try {
+      const formData = new FormData(event.currentTarget);
+
+      console.log("Send request");
+      console.log(formData.get("doryquestion")?.toString())
+      const { data, errors } = await amplifyClient.queries.askKnowledgeBase({
+        doryquestion: [formData.get("doryquestion")?.toString() || ""],
+      });
+
+      if (!errors) {
+        setResult(data?.body || "No data returned");
+      } else {
+        console.log("Receviced a error:");
+        console.log(errors);
+      }
+
+
+    } catch (e) {
+      alert(`An error occurred: ${e}`);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="app-container">
       <div className="header-container">
@@ -75,6 +102,22 @@ function App() {
           </button>
         </div>
       </form>
+
+      <form onSubmit={onSubmitAsk} className="form-container">
+        <div className="search-container">
+          <input
+            type="text"
+            className="wide-input"
+            id="doryquestion"
+            name="doryquestion"
+            placeholder="question about cb3"
+          />
+          <button type="submit" className="search-button">
+            Ask
+          </button>
+        </div>
+      </form>
+
       <div className="result-container">
         {loading ? (
           <div className="loader-container">
