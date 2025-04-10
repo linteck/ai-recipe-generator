@@ -6,13 +6,25 @@ const schema = a.schema({
     error: a.string(),
   }),
 
+  knowledgeBase: a
+    .query()
+    .arguments({ input: a.string() })
+    .handler(
+      a.handler.custom({
+        dataSource: "KnowledgeBaseDataSource",
+        entry: "./resolvers/kbResolver.js",
+      }),
+    )
+    .returns(a.string())
+    .authorization((allow) => allow.authenticated()),
+
   askBedrock: a
     .query()
     .arguments({ ingredients: a.string().array() })
     .returns(a.ref("BedrockResponse"))
     .authorization((allow) => [allow.authenticated()])
     .handler(
-      a.handler.custom({ entry: "./bedrock.js", dataSource: "bedrockDS" })
+      a.handler.custom({ entry: "./bedrock.js", dataSource: "KnowledgeBaseDataSource" })
     ),
 });
 
