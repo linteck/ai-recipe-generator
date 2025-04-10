@@ -47,34 +47,34 @@ function App() {
     }
   };
 
-  const onSubmitAsk = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoading(true);
-
-    try {
-      const formData = new FormData(event.currentTarget);
-
-      console.log("Send request");
-      console.log(formData.get("doryquestion")?.toString())
-      const { data, errors } = await amplifyClient.queries.askKnowledgeBase({
-        doryquestion: [formData.get("doryquestion")?.toString() || ""],
-      });
-
-      if (!errors) {
-        setResult(data?.body || "No data returned");
-      } else {
-        console.log("Receviced a error:");
-        console.log(errors);
-      }
-
-
-    } catch (e) {
-      alert(`An error occurred: ${e}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // const onSubmitAsk = async (event: FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   setLoading(true);
+  //
+  //   try {
+  //     const formData = new FormData(event.currentTarget);
+  //
+  //     console.log("Send request");
+  //     console.log(formData.get("doryquestion")?.toString())
+  //     const { data, errors } = await amplifyClient.queries.askKnowledgeBase({
+  //       doryquestion: [formData.get("doryquestion")?.toString() || ""],
+  //     });
+  //
+  //     if (!errors) {
+  //       setResult(data?.body || "No data returned");
+  //     } else {
+  //       console.log("Receviced a error:");
+  //       console.log(errors);
+  //     }
+  //
+  //
+  //   } catch (e) {
+  //     alert(`An error occurred: ${e}`);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  //
   const onSubmitDoryAsk = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
@@ -96,6 +96,7 @@ function App() {
       setLoading(false);
     }
   };
+
   return (
     <div className="app-container">
       <div className="header-container">
