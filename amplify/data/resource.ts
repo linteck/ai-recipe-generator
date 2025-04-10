@@ -27,26 +27,31 @@ const schema = a.schema({
       a.handler.custom({ entry: "./bedrock.js", dataSource: "bedrockDS" })
     ),
 
+  // askKnowledgeBase2: a
+  //   .query()
+  //   .arguments({ doryquestion: a.string().array() })
+  //   .returns(a.ref("BedrockResponse"))
+  //   .authorization((allow) => [allow.authenticated()])
+  //   .handler(
+  //     a.handler.custom({
+  //       entry: "./bedrock.js",
+  //       dataSource: "KnowledgeBaseDataSource",
+  //     })
+  //   ),
+  //
   askKnowledgeBase: a
-    .query()
-    .arguments({ doryquestion: a.string().array() })
-    .returns(a.ref("BedrockResponse"))
-    .authorization((allow) => [allow.authenticated()])
-    .handler(
-      a.handler.custom({ entry: "./bedrock.js", dataSource: a.ref('knowledgeBase') })
-    ),
-
-  // askKnowledgeBase2: a.conversation({
-  //   aiModel: a.ai.model("Claude 3.5 Sonnet"),
-  //   systemPrompt: `You are a helpful assistant.`,
-  //   tools: [
-  //     a.ai.dataTool({
-  //       name: 'searchDocumentation',
-  //       description: 'Performs a similarity search over the documentation for ...',
-  //       query: a.ref('knowledgeBase'),
-  //     }),
-  //   ],
-  // }),
+    .conversation({
+      aiModel: a.ai.model("Claude 3.5 Sonnet"),
+      systemPrompt: `You are a helpful assistant.`,
+      tools: [
+        a.ai.dataTool({
+          name: 'searchDocumentation',
+          description: 'Performs a similarity search over the documentation for ...',
+          query: a.ref('knowledgeBase'),
+        }),
+      ],
+    })
+    .authorization((allow) => allow.owner()),
 });
 
 export type Schema = ClientSchema<typeof schema>;

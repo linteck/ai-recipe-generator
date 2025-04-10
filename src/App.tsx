@@ -74,6 +74,28 @@ function App() {
       setLoading(false);
     }
   };
+
+  const onSubmitDoryAsk = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+
+    try {
+      const formData = new FormData(event.currentTarget);
+
+      console.log("Send request");
+      console.log(formData.get("doryquestion")?.toString())
+      const data = await amplifyClient.queries.askKnowledgeBase({
+        systemPrompt: formData.get("doryquestion")?.toString() || "",
+      });
+
+      setResult(data?.body || "No data returned");
+
+    } catch (e) {
+      alert(`An error occurred: ${e}`);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="app-container">
       <div className="header-container">
@@ -103,7 +125,7 @@ function App() {
         </div>
       </form>
 
-      <form onSubmit={onSubmitAsk} className="form-container">
+      <form onSubmit={onSubmitDoryAsk} className="form-container">
         <div className="search-container">
           <input
             type="text"
