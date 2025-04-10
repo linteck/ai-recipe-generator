@@ -26,6 +26,8 @@ function App() {
     try {
       const formData = new FormData(event.currentTarget);
 
+      console.log("Send request");
+      console.log(formData.get("ingredients")?.toString())
       const { data, errors } = await amplifyClient.queries.askBedrock({
         ingredients: [formData.get("ingredients")?.toString() || ""],
       });
@@ -33,6 +35,7 @@ function App() {
       if (!errors) {
         setResult(data?.body || "No data returned");
       } else {
+        console.log("Receviced a error:");
         console.log(errors);
       }
 
